@@ -1,4 +1,7 @@
 {
+  "engines": {
+    "node": "v22.20.0"
+  },
   "name": "mini-social-backend",
   "version": "1.0.0",
   "description": "",
