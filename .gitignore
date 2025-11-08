@@ -1,0 +1,10 @@
+mini-social-frontend/node_modules/
+mini-social-backend/node_modules/
+.env
+.env.local
+.DS_Store
+Thumbs.db
+build/
+dist/
+package-lock.json
+npm-debug.log
