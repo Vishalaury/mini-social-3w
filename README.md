@@ -33,7 +33,7 @@ Responsive and simple user interface
 
 Deployment Links
 
-Frontend: mini-social-3w-cv6o.vercel.app
+Frontend: https://mini-social-3w-cv6o.vercel.app
 
 Backend: https://mini-social-3w-4.onrender.com
 
