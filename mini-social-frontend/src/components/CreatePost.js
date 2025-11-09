@@ -115,35 +115,19 @@ const CreatePost = () => {
           />
         </div>
 
-        {submitting && (
-          <div className="submit-loading" style={{display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12}}>
-            <div className="spinner" style={{width:20, height:20}}></div>
-            <div>Server is waking up... please wait a few seconds</div>
-          </div>
-        )}
-
         <div className="editor-actions">
-          <button type="button" className="cancel-button" onClick={() => navigate('/feed')} disabled={submitting}>
+          <button type="button" className="cancel-button" onClick={() => navigate('/feed')}>
             Back to Feed
           </button>
           <button 
             type="submit" 
             className="publish-button"
-            disabled={submitting || !text.trim() || text.length > 500}
+            disabled={!text.trim() || text.length > 500}
           >
-            {submitting ? (
-              <>
-                <div className="spinner" style={{width:16, height:16, marginRight:8}}></div>
-                Posting...
-              </>
-            ) : (
-              <>
-                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18l9-2zm0 0v-8"></path>
-                </svg>
-                Post
-              </>
-            )}
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18l9-2zm0 0v-8"></path>
+            </svg>
+            Post
           </button>
         </div>
       </form>
