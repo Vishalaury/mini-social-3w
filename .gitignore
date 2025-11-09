@@ -6,5 +6,5 @@ mini-social-backend/node_modules/
 Thumbs.db
 build/
 dist/
-package-lock.json
+# package-lock.json
 npm-debug.log
