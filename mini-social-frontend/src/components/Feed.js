@@ -12,29 +12,32 @@ const Feed = () => {
 
   const navigate = useNavigate();
 
-  const fetchPosts = async () => {
+  // Only show server waking message on initial load
+  const fetchPosts = async (isInitialLoad = false) => {
     try {
-      //  Show loading screen before fetching
-      setServerWaking(true);
+      // Only show loading screen on initial load
+      if (isInitialLoad) {
+        setServerWaking(true);
+      }
 
       const res = await API.get('/posts/feed');
       setPosts(res.data);
     } catch (err) {
       console.log('Server may be waking up...');
     } finally {
-      // (3) Hide loading after API finishes 
       setServerWaking(false);
     }
   };
 
   useEffect(() => {
-    fetchPosts();
+    // Pass true for initial load
+    fetchPosts(true);
   }, []);
 
   const [selectedPost, setSelectedPost] = useState(null);
 
   return (
-    <div>
+    <div className="app-container">
       {/* 🔹 (4) Loader Section Added */}
       {serverWaking && (
         <div className="server-waking">
@@ -80,18 +83,22 @@ const Feed = () => {
         </div>
       </div>
 
-      <div className="feed-container">
-        {posts.length === 0 && <p className="empty-state">No posts yet. Create the first post!</p>}
-        {posts.map((post) => (
-          <PostCard key={post._id} post={post} refreshFeed={fetchPosts} onOpen={(p) => setSelectedPost(p)} />
-        ))}
-      </div>
+      <main className="main-content">
+        <div className="feed-wrapper">
+          <div className="feed-container">
+            {posts.length === 0 && <p className="empty-state">No posts yet. Create the first post!</p>}
+            {posts.map((post) => (
+              <PostCard key={post._id} post={post} refreshFeed={() => fetchPosts(false)} onOpen={(p) => setSelectedPost(p)} />
+            ))}
+          </div>
+        </div>
+      </main>
 
       {selectedPost && (
         <PostModal
           post={selectedPost}
           onClose={() => setSelectedPost(null)}
-          refreshFeed={fetchPosts}
+          refreshFeed={() => fetchPosts(false)}
         />
       )}
     </div>

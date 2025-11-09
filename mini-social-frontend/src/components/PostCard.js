@@ -14,18 +14,24 @@ const formatDate = (iso) => {
 const PostCard = ({ post, refreshFeed, onOpen }) => {
   const username = localStorage.getItem('username');
   const [commentText, setCommentText] = useState('');
+  const [isLiking, setIsLiking] = useState(false);
+  const [isCommenting, setIsCommenting] = useState(false);
 
   const handleLike = async () => {
+    if (isLiking) return;
+    setIsLiking(true);
     try {
       await API.post('/posts/like', { postId: post._id, username });
       refreshFeed();
     } catch (err) {
       alert('Failed to like post');
     }
+    setIsLiking(false);
   };
 
   const handleComment = async () => {
-    if (!commentText) return;
+    if (!commentText || isCommenting) return;
+    setIsCommenting(true);
     try {
       await API.post('/posts/comment', { postId: post._id, username, text: commentText });
       setCommentText('');
@@ -33,6 +39,7 @@ const PostCard = ({ post, refreshFeed, onOpen }) => {
     } catch (err) {
       alert('Failed to comment');
     }
+    setIsCommenting(false);
   };
 
   const handleOpen = () => onOpen && onOpen(post);
@@ -77,8 +84,21 @@ const PostCard = ({ post, refreshFeed, onOpen }) => {
       </div>
 
       <div className="post-actions">
-        <button aria-label="Like post" className="like-btn nav-button" onClick={(e) => { e.stopPropagation(); handleLike(); }}>Like</button>
-        <button aria-label="Focus comment" className="comment-btn nav-button" onClick={(e) => { e.stopPropagation(); /* could focus comment input */ }}>Comment</button>
+        <button 
+          aria-label="Like post" 
+          className="like-btn nav-button" 
+          onClick={(e) => { e.stopPropagation(); handleLike(); }}
+          disabled={isLiking}
+        >
+          {isLiking ? 'Liking...' : 'Like'}
+        </button>
+        <button 
+          aria-label="Focus comment" 
+          className="comment-btn nav-button" 
+          onClick={(e) => { e.stopPropagation(); }}
+        >
+          Comment
+        </button>
       </div>
 
       <div className="comment-area" onClick={(e) => e.stopPropagation()}>
@@ -87,8 +107,15 @@ const PostCard = ({ post, refreshFeed, onOpen }) => {
           placeholder="Write a comment..."
           value={commentText}
           onChange={(e) => setCommentText(e.target.value)}
+          disabled={isCommenting}
         />
-        <button className="comment-submit" onClick={handleComment}>Post</button>
+        <button 
+          className="comment-submit" 
+          onClick={handleComment}
+          disabled={isCommenting || !commentText.trim()}
+        >
+          {isCommenting ? 'Posting...' : 'Post'}
+        </button>
       </div>
 
       <div className="comment-list">

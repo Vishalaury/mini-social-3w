@@ -4,6 +4,8 @@ import API from '../api';
 const PostModal = ({ post: initialPost, onClose, refreshFeed }) => {
   const [post, setPost] = useState(initialPost);
   const [commentText, setCommentText] = useState('');
+  const [isLiking, setIsLiking] = useState(false);
+  const [isCommenting, setIsCommenting] = useState(false);
   const username = localStorage.getItem('username');
 
   useEffect(() => {
@@ -21,6 +23,8 @@ const PostModal = ({ post: initialPost, onClose, refreshFeed }) => {
   };
 
   const handleLike = async () => {
+    if (isLiking) return;
+    setIsLiking(true);
     try {
       await API.post('/posts/like', { postId: post._id, username });
       await refreshLocal();
@@ -28,10 +32,12 @@ const PostModal = ({ post: initialPost, onClose, refreshFeed }) => {
     } catch (err) {
       alert('Failed to like post');
     }
+    setIsLiking(false);
   };
 
   const handleComment = async () => {
-    if (!commentText.trim()) return;
+    if (!commentText.trim() || isCommenting) return;
+    setIsCommenting(true);
     try {
       await API.post('/posts/comment', { postId: post._id, username, text: commentText });
       setCommentText('');
@@ -40,6 +46,7 @@ const PostModal = ({ post: initialPost, onClose, refreshFeed }) => {
     } catch (err) {
       alert('Failed to comment');
     }
+    setIsCommenting(false);
   };
 
   if (!post) return null;
@@ -65,7 +72,13 @@ const PostModal = ({ post: initialPost, onClose, refreshFeed }) => {
           )}
 
           <div className="modal-actions">
-            <button onClick={handleLike} className="nav-button create-button">Like <span className="count">{post.like?.count || 0}</span></button>
+            <button 
+              onClick={handleLike} 
+              className="nav-button create-button"
+              disabled={isLiking}
+            >
+              {isLiking ? 'Liking...' : 'Like'} <span className="count">{post.like?.count || 0}</span>
+            </button>
           </div>
 
           <div className="modal-comments">
@@ -75,8 +88,19 @@ const PostModal = ({ post: initialPost, onClose, refreshFeed }) => {
             ))}
 
             <div className="comment-input-row">
-              <input value={commentText} onChange={(e) => setCommentText(e.target.value)} placeholder="Write a comment..." />
-              <button onClick={handleComment} className="publish-button" disabled={!commentText.trim()}>Post</button>
+              <input 
+                value={commentText} 
+                onChange={(e) => setCommentText(e.target.value)} 
+                placeholder="Write a comment..." 
+                disabled={isCommenting}
+              />
+              <button 
+                onClick={handleComment} 
+                className="publish-button" 
+                disabled={!commentText.trim() || isCommenting}
+              >
+                {isCommenting ? 'Posting...' : 'Post'}
+              </button>
             </div>
           </div>
         </div>

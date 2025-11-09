@@ -22,10 +22,6 @@ const Login = () => {
 
   return (
     <div className="app-bg">
-      <div className="auth-header">
-        <div className="auth-logo">M</div>
-        <h1>Mini Social</h1>
-      </div>
 
       <div className="auth-container">
         <div className="form-container login-form">

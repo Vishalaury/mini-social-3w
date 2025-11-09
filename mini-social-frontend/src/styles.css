@@ -1,8 +1,29 @@
+/* Base styles with fluid typography */
+:root {
+  --fluid-min-width: 320;
+  --fluid-max-width: 1200;
+  --fluid-screen: 100vw;
+  --fluid-bp: calc((var(--fluid-screen) - var(--fluid-min-width) / 16 * 1rem) / (var(--fluid-max-width) - var(--fluid-min-width)));
+}
+
+/* Professional Layout System */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
 body {
-  font-family: Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background: #f2f2f2;
+  background: #f8fafc;
+  font-size: clamp(14px, calc(14px + 2 * var(--fluid-bp)), 16px);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .app-bg {
@@ -11,23 +32,54 @@ body {
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, #e9f0ff 0%, #f7fbff 40%, #f2f2f2 100%);
+  /* ensure content doesn't hug the left edge on small screens */
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .form-container {
-  width: 380px;
+  /* make the form card fluid and centered on any screen */
+  width: min(92%, 380px);
+  max-width: 420px;
   margin: 40px auto;
   background: #ffffff;
-  padding: 28px 26px;
+  padding: 28px 20px;
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(31, 73, 125, 0.12);
   border: 1px solid rgba(16,24,40,0.04);
+  box-sizing: border-box;
 }
 
 .form-container input {
   display: block;
   width: 100%;
-  margin-bottom: 12px;
-  padding: 10px;
+  margin: 10px 0; /* give breathing room above and below */
+  padding: 12px 14px;
+  border: 1px solid #e6edf8; /* soft border, not black */
+  border-radius: 8px;
+  background: #ffffff;
+  color: #0f1724;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-container input:focus {
+  outline: none;
+  border-color: #6ea8fe;
+  box-shadow: 0 6px 18px rgba(59,130,246,0.08);
+}
+
+/* Remove browser dark autofill background/outlines and ensure text color */
+input:-webkit-autofill,
+textarea:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #fff inset !important;
+  box-shadow: 0 0 0px 1000px #fff inset !important;
+  -webkit-text-fill-color: #0f1724 !important;
+}
+
+/* keep first input slightly separated from header */
+.form-container h2 + p + form input:first-of-type {
+  margin-top: 8px;
 }
 
 .form-container button {
@@ -262,10 +314,30 @@ body {
 }
 
 .auth-container {
-  max-width: 420px;
+  max-width: 520px;
+  width: min(96%, 520px);
   margin: 0 auto;
   animation: fadeUp 0.5s ease-out;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* keep children centered */
 }
+
+/* Ensure the form card and the signup panel share the same centered width
+   so the login page never appears left-aligned on small screens */
+.auth-container .form-container,
+.auth-container .signup-option,
+.auth-container .auth-divider {
+  width: 100%;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+/* make sure divider spans the centered content */
+.auth-divider::before { left: 0; right: 0; }
 
 .auth-subtitle {
   text-align: center;
@@ -368,49 +440,305 @@ body {
   }
 }
 
-/* make the form card a bit narrower on small screens */
-@media (max-width: 420px) {
+/* Responsive Design System */
+/* Large Desktop (1200px and up) */
+@media (min-width: 1200px) {
+  .feed-container {
+    max-width: 800px;
+    padding: 0 20px;
+  }
+  
+  .post-image {
+    height: 300px;
+  }
+}
+
+/* Desktop and Small Laptop (992px to 1199px) */
+@media (min-width: 992px) and (max-width: 1199px) {
+  .feed-container {
+    max-width: 760px;
+    padding: 0 16px;
+  }
+  
+  .post-image {
+    height: 260px;
+  }
+}
+
+/* Tablet Landscape (768px to 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+  .feed-container {
+    max-width: 720px;
+    padding: 0 12px;
+  }
+  
+  .post-card {
+    padding: 16px;
+  }
+  
+  .post-image {
+    height: 220px;
+  }
+  
+  .navbar {
+    padding: 12px 16px;
+  }
+  
+  .modal {
+    width: 90%;
+    margin: 0 20px;
+  }
+}
+
+/* Tablet Portrait (576px to 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+  .feed-container {
+    max-width: 540px;
+    padding: 0 10px;
+  }
+  
+  .post-card {
+    padding: 14px;
+  }
+  
+  .form-container {
+    width: 90%;
+    max-width: 500px;
+    padding: 20px;
+  }
+  
+  .post-image {
+    height: 200px;
+  }
+  
+  .navbar {
+    padding: 10px 12px;
+  }
+  
+  .nav-title {
+    font-size: 14px;
+  }
+  
+  .nav-subtitle {
+    font-size: 12px;
+  }
+  
+  .nav-button {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+  
+  .modal {
+    width: 95%;
+    margin: 0 10px;
+  }
+  
+  .modal-body {
+    padding: 16px;
+  }
+}
+
+/* Mobile Landscape (420px to 575px) */
+@media (min-width: 420px) and (max-width: 575px) {
+  .feed-container {
+    padding: 0 8px;
+  }
+  
+  .post-card {
+    padding: 12px;
+  }
+  
   .form-container {
     width: 92%;
-    margin: 20px auto;
-    padding: 18px;
+    padding: 16px;
   }
   
   .create-post-container {
-    padding: 0 16px;
-    margin: 20px auto;
+    padding: 0 12px;
   }
   
   .post-editor {
-    padding: 16px;
+    padding: 14px;
   }
-
+  
   .auth-container {
     width: 92%;
-    padding: 0 16px;
+    padding: 0 12px;
   }
+  
+  .post-image {
+    height: 180px;
+  }
+  
+  .navbar {
+    padding: 8px 12px;
+  }
+  
+  .app-logo {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+  
+  .nav-title {
+    font-size: 14px;
+  }
+  
+  .nav-subtitle {
+    display: none;
+  }
+  
+  .user-info {
+    padding: 4px 8px;
+  }
+  
+  .username-display {
+    font-size: 13px;
+  }
+  
+  .modal {
+    width: 100%;
+    margin: 0 8px;
+    max-height: 95vh;
+  }
+  
+  .modal-header {
+    padding: 12px 16px;
+  }
+  
+  .modal-body {
+    padding: 14px;
+  }
+}
 
+/* Mobile Portrait (up to 419px) */
+@media (max-width: 419px) {
+  .feed-container {
+    padding: 0 6px;
+  }
+  
+  .post-card {
+    padding: 10px;
+  }
+  
+  .form-container {
+    width: 94%;
+    padding: 14px;
+    margin: 16px auto;
+  }
+  
+  .create-post-container {
+    padding: 0 10px;
+    margin: 16px auto;
+  }
+  
+  .post-editor {
+    padding: 12px;
+  }
+  
+  .auth-container {
+    width: 94%;
+    padding: 0 10px;
+  }
+  
   .auth-header {
-    margin-bottom: 24px;
+    margin-bottom: 20px;
   }
-
+  
   .signup-option {
-    padding: 20px 16px;
+    padding: 16px 12px;
+  }
+  
+  .post-image {
+    height: 160px;
+  }
+  
+  .navbar {
+    padding: 8px 10px;
+  }
+  
+  .app-logo {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+  
+  .nav-title {
+    font-size: 13px;
+    margin-left: 8px;
+  }
+  
+  .nav-subtitle {
+    display: none;
+  }
+  
+  .navbar-actions {
+    gap: 8px;
+  }
+  
+  .user-info {
+    padding: 4px 6px;
+  }
+  
+  .user-avatar {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+  }
+  
+  .username-display {
+    font-size: 12px;
+  }
+  
+  .nav-button {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  
+  .modal {
+    width: 100%;
+    margin: 0 6px;
+    max-height: 98vh;
+  }
+  
+  .modal-header {
+    padding: 10px 12px;
+  }
+  
+  .modal-body {
+    padding: 12px;
+  }
+  
+  .comment-area {
+    flex-direction: column;
+  }
+  
+  .comment-input {
+    width: 100%;
+  }
+  
+  .comment-submit {
+    width: 100%;
   }
 }
 
 .navbar {
-  background: white;
+  background: rgba(255, 255, 255, 0.98);
   color: #0f1724;
-  padding: 12px 24px;
+  padding: 12px 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 4px 12px rgba(16,24,40,0.06);
-  border-bottom: 1px solid rgba(16,24,40,0.08);
+  box-shadow: 0 1px 2px rgba(16,24,40,0.05);
+  border-bottom: 1px solid rgba(226,232,240,0.8);
+  backdrop-filter: blur(8px);
   position: sticky;
   top: 0;
   z-index: 100;
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Navbar brand section */
@@ -522,23 +850,68 @@ body {
   background: #fecaca;
 }
 
+/* Main Content Layout */
+.main-content {
+  flex: 1;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  gap: 20px;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.feed-wrapper {
+  flex: 1;
+  max-width: 680px;
+  margin: 0 auto;
+  width: 100%;
+}
+
 .feed-container {
-  max-width: 760px; /* slightly narrower for a tighter, professional layout */
-  margin: 20px auto;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 14px;
-  padding: 0 12px;
+  padding: 16px 0;
+}
+
+/* Center primary page sections and give consistent side padding so
+   the layout always appears centered and professional on any device */
+.feed-container,
+.create-post-container,
+.auth-container,
+.modal {
+  max-width: 980px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16px;
+  padding-right: 16px;
+  box-sizing: border-box;
+}
+
+/* Make post cards fill the available centered column cleanly */
+.post-card {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
 }
 
 .post-card {
   background: #fff;
-  padding: 14px; /* tighter padding to reduce card size */
-  border-radius: 10px;
-  box-shadow: 0 6px 18px rgba(15,23,42,0.06);
-  border: 1px solid rgba(16,24,40,0.04);
-  max-width: 760px;
-  margin: 0 auto;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(226,232,240,0.8);
+  box-shadow: 0 2px 4px rgba(148,163,184,0.05);
+  margin-bottom: 12px;
+  width: 100%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.post-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(148,163,184,0.12);
 }
 
 .post-stats .stat { display:flex; align-items:center; gap:8px; font-weight:600; }
