@@ -14,7 +14,7 @@ app.use(
   cors({
     origin: [
       'http://localhost:3000',
-      'https://mini-social-3w-bxg6.vercel.app', // correct frontend domain
+      'https://mini-social-3w-cv6o.vercel.app', //  correct frontend domain
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
