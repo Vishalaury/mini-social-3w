@@ -14,13 +14,14 @@ app.use(
   cors({
     origin: [
       'http://localhost:3000',
-      'https://mini-social-3w-cv6o.vercel.app', // your actual Vercel domain
+      'https://mini-social-3w-bxg6.vercel.app', // correct frontend domain
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   })
 );
+
 
 //  Increase payload size (for base64 images)
 app.use(express.json({ limit: '12mb' }));
