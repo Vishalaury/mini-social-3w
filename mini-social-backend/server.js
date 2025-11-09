@@ -127,7 +127,7 @@ app.use(
   cors({
     origin: [
       'http://localhost:3000',
-      'https://mini-social-3w-4rdp.vercel.app' // Apna actual Vercel frontend URL
+      'https://mini-social-3w-cv6o.vercel.app' // naya actual frontend link
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
