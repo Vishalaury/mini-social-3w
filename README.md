@@ -33,9 +33,9 @@ Responsive and simple user interface
 
 Deployment Links
 
-Frontend: https://mini-social-frontend.vercel.app
+Frontend: mini-social-3w-cv6o.vercel.app
 
-Backend: https://mini-social-backend.onrender.com
+Backend: https://mini-social-3w-4.onrender.com
 
 Database: MongoDB Atlas
 
